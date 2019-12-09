@@ -19,14 +19,18 @@ struct AddImageView: View {
             GeometryReader{ geometry in
                 VStack(alignment: .center){
                     ZStack{
+                        Circle()
+                            .fill(Color.white)
+                        .frame(width: geometry.size.width * 0.9 , height: geometry.size.height * 0.5)
+                        .padding()
+                        
                         if self.selectedImage != nil{
-                            self.selectedImage
-                        }else{
-                            Circle()
-                                .fill(Color.gray)
-                                .frame(width: geometry.size.width * 0.9 , height: geometry.size.height * 0.6)
-                                .padding()
+                            self.selectedImage?
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(Circle())
                             
+                        }else{
                             Text("Tap to select image")
                                 .foregroundColor(.blue)
                                 .onTapGesture {
@@ -34,20 +38,34 @@ struct AddImageView: View {
                             }
                         }
                     }
+                    
                     Section(header: Text("Caption")){
                         TextField("caption", text: self.$imageCaption)
+                        .padding()
+                            .overlay(Rectangle().stroke(Color.gray , lineWidth: 0.5))
                     }
                     .padding()
+                    
                     
                     Button(action:{
                         //Perform saving function
                     }){
                         Text("Save to Library")
+                        .foregroundColor(.white)
+                            .background(Color.blue)
+                        .padding()
+                            .background(Color.blue)
+                            
                     }
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(Color.black , lineWidth: 1))
+                    .disabled(true)
+                    
+                    
                     Spacer()
                 }
                 .sheet(isPresented: self.$showingImagePicker) {
-                    ImagePicker()
+                    ImagePicker(selectedImage: self.$selectedImage)
                 }
                 
             }
