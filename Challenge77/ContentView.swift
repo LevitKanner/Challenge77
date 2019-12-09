@@ -51,30 +51,6 @@ struct ContentView: View {
         self.images.images.remove(atOffsets: offsets)
     }
     
-    func getFileDirectory() -> URL{
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-    
-    func loadFromDirectory(){
-        let url = getFileDirectory().appendingPathComponent("")
-        do {
-            let data =  try Data(contentsOf: url)
-            images.images = try JSONDecoder().decode([ImageModel].self, from: data)
-        }catch{
-            debugPrint(error)
-        }
-    }
-    
-    func saveToDirectory(){
-        let url = getFileDirectory().appendingPathComponent("")
-        
-        do {
-            let data = try JSONEncoder().encode(self.images)
-        }catch {
-            debugPrint(error)
-        }
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
