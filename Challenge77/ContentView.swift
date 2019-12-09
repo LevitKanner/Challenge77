@@ -9,20 +9,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    var images = [ImageModel]()
+    @ObservedObject var images = Images()
     @State private var showingAddImageView = false
     
     var body: some View {
         NavigationView{
             List{
-                ForEach(images) { image in
-                    NavigationLink(destination: Text("Image coming")) {
+                ForEach(images.images) { image in
+                    NavigationLink(destination: ImageDetailsView(image: image)) {
                         HStack{
                             image.image
                             .resizable()
                             .scaledToFit()
+                                .frame(width: 44 , height: 44)
                             .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.black , lineWidth: 1))
+                                .overlay(Circle().stroke(Color.black , lineWidth: 0.5))
                             
                             Text(image.name)
                         }
@@ -33,6 +34,7 @@ struct ContentView: View {
             .navigationBarItems(leading: EditButton() ,trailing: Button(action:{
                 //Button action here...
                 self.showingAddImageView = true
+                self.images.images.append(ImageModel(image: Image("cupcakes"), name: "truing"))
             }){
                 Image(systemName: "plus")
             })
