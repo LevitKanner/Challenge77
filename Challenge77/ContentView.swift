@@ -26,7 +26,7 @@ struct ContentView: View {
                                 .overlay(Circle().stroke(Color.black , lineWidth: 0.5))
                             
                             Text(image.name)
-                                .font(.system(size: 18))
+                                .font(.system(size: 16))
                         }
                     }
                 }
