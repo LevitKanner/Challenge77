@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct ImageModel: Identifiable , Comparable{
+struct ImageModel: Identifiable , Comparable , Codable{
     enum codingKeys: CodingKey{
         case id , image , name
     }
@@ -21,7 +21,20 @@ struct ImageModel: Identifiable , Comparable{
     var image: Image
     var name: String
     
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: codingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: codingKeys.self)
+        try container.encode(id.self, forKey: .id)
+        try container.encode(name.self, forKey: .name)
+    }
+    
 }
+
 
 
 class Images: ObservableObject{
