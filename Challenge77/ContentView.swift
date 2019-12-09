@@ -30,6 +30,9 @@ struct ContentView: View {
                         }
                     }
                 }
+                .onDelete { (offsets) in
+                    self.deleteRow(offsets: offsets)
+                }
             }
             .navigationBarTitle("Image Library")
             .navigationBarItems(leading: EditButton() ,trailing: Button(action:{
@@ -43,6 +46,9 @@ struct ContentView: View {
                     AddImageView(images: self.images)
             }
         }
+    }
+    func deleteRow(offsets: IndexSet){
+        self.images.images.remove(atOffsets: offsets)
     }
 }
 
