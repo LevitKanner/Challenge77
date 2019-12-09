@@ -11,17 +11,23 @@ import SwiftUI
 struct ImageDetailsView: View {
     @State var image: ImageModel
     var body: some View {
-        VStack{
-            Text(image.name.uppercased())
-                .font(.largeTitle)
-                .padding()
+        GeometryReader{ geometry in
             
-            Divider()
-            
-            image.image
-            
-            Spacer()
+            VStack{
+                Text(self.image.name.uppercased())
+                    .font(.largeTitle)
+                    .padding()
+                
+                Divider()
+                
+                self.image.image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: geometry.size.width)
+                
+                
+                Spacer()
+            }
         }
     }
 }
-

@@ -19,18 +19,19 @@ struct ContentView: View {
                     NavigationLink(destination: ImageDetailsView(image: image)) {
                         HStack{
                             image.image
-                            .resizable()
-                            .scaledToFit()
+                                .resizable()
+                                .scaledToFit()
                                 .frame(width: 44 , height: 44)
-                            .clipShape(Circle())
+                                .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.black , lineWidth: 0.5))
                             
                             Text(image.name)
+                                .font(.system(size: 18))
                         }
                     }
                 }
             }
-        .navigationBarTitle("Image Library")
+            .navigationBarTitle("Image Library")
             .navigationBarItems(leading: EditButton() ,trailing: Button(action:{
                 //Button action here...
                 self.showingAddImageView = true
@@ -39,7 +40,7 @@ struct ContentView: View {
                 Image(systemName: "plus")
             })
                 .sheet(isPresented: $showingAddImageView) {
-                    AddImageView()
+                    AddImageView(images: self.images)
             }
         }
     }

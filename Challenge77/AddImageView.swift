@@ -13,6 +13,11 @@ struct AddImageView: View {
     @State private var showingImagePicker = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
+    var images: Images
+    var formValidation: Bool{
+        return imageCaption.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && selectedImage == nil
+    }
+    
     
     var body: some View {
         NavigationView{
@@ -21,27 +26,27 @@ struct AddImageView: View {
                     ZStack{
                         Circle()
                             .fill(Color.white)
-                        .frame(width: geometry.size.width * 0.9 , height: geometry.size.height * 0.5)
-                        .padding()
+                            .frame(width: geometry.size.width * 0.9 , height: geometry.size.height * 0.5)
+                            .padding()
                         
                         if self.selectedImage != nil{
                             self.selectedImage?
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(Circle())
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(Circle())
                             
                         }else{
                             Text("Tap to select image")
                                 .foregroundColor(.blue)
-                                .onTapGesture {
-                                    self.showingImagePicker = true
-                            }
                         }
+                    }
+                    .onTapGesture {
+                        self.showingImagePicker = true
                     }
                     
                     Section(header: Text("Caption")){
                         TextField("caption", text: self.$imageCaption)
-                        .padding()
+                            .padding()
                             .overlay(Rectangle().stroke(Color.gray , lineWidth: 0.5))
                     }
                     .padding()
@@ -49,17 +54,18 @@ struct AddImageView: View {
                     
                     Button(action:{
                         //Perform saving function
+                        self.saveImage()
                     }){
                         Text("Save to Library")
-                        .foregroundColor(.white)
+                            .foregroundColor(.white)
                             .background(Color.blue)
-                        .padding()
+                            .padding()
                             .background(Color.blue)
-                            
+                        
                     }
                     .clipShape(Capsule())
                     .overlay(Capsule().stroke(Color.black , lineWidth: 1))
-                    .disabled(true)
+                    .disabled(self.formValidation)
                     
                     
                     Spacer()
@@ -75,10 +81,31 @@ struct AddImageView: View {
             })
         }
     }
+    
+    
+    
+    func saveImage(){
+        guard !self.imageCaption.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {return}
+        
+        //Checking that a user enters meaningful text as caption
+        let textChecker = UITextChecker()
+        let range = NSRange(location: 0, length: self.imageCaption.utf16.count)
+        let misspelledRange = textChecker.rangeOfMisspelledWord(in: self.imageCaption, range: range, startingAt: 0, wrap: false, language: "en")
+        
+        guard misspelledRange.location == NSNotFound else {return}
+        
+        //Unwrapping selected image
+        guard let image = self.selectedImage else {return}
+        
+        let createdImage = ImageModel(image: image, name: imageCaption)
+        self.images.images.append(createdImage)
+        self.images.images.sort()
+        self.presentationMode.wrappedValue.dismiss()
+    }
 }
 
 struct AddImageView_Previews: PreviewProvider {
     static var previews: some View {
-        AddImageView()
+        AddImageView(images: Images())
     }
 }
