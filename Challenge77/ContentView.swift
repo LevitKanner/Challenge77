@@ -38,7 +38,6 @@ struct ContentView: View {
             .navigationBarItems(leading: EditButton() ,trailing: Button(action:{
                 //Button action here...
                 self.showingAddImageView = true
-                self.images.images.append(ImageModel(image: Image("cupcakes"), name: "truing"))
             }){
                 Image(systemName: "plus")
             })
