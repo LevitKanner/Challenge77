@@ -14,6 +14,8 @@ struct ImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     @Binding var selectedImage: Image?
     
+    
+    
     ///Creates a coordinator class that acts as a delegate for the image picker struct
     class Coordinator: NSObject , UINavigationControllerDelegate , UIImagePickerControllerDelegate{
         let parent: ImagePicker
@@ -28,23 +30,31 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
     
+    
+    
+    
+    
     func makeCoordinator() -> ImagePicker.Coordinator {
         Coordinator(self)
     }
     
     
+    
+    
+    
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIViewController {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = context.coordinator
+        imagePicker.sourceType = .camera
         return imagePicker
     }
+    
+    
+    
     
     
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<ImagePicker>) {
         
     }
-    
-    
-    
-    
+  
 }
