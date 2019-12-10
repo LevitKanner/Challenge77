@@ -8,8 +8,13 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
 
 struct ImageModel: Identifiable , Comparable {
+    static func == (lhs: ImageModel, rhs: ImageModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     enum codingKeys: CodingKey{
         case id , image , name
     }
@@ -20,6 +25,7 @@ struct ImageModel: Identifiable , Comparable {
     let id = UUID()
     var image: Image
     var name: String
+    var location: CLLocationCoordinate2D?
     
 }
 

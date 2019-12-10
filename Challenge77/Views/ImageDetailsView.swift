@@ -32,7 +32,7 @@ struct ImageDetailsView: View {
                     Spacer()
                 }
             }else {
-                MapView()
+                MapView(location: self.image.location!)
                     .edgesIgnoringSafeArea(.all)
             }
         }
@@ -46,4 +46,5 @@ struct ImageDetailsView: View {
             .pickerStyle(SegmentedPickerStyle()))
             .navigationBarBackButtonHidden(self.viewDisplayed == 1)
     }
+    
 }

@@ -7,12 +7,15 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct AddImageView: View {
     @State private var selectedImage: Image?
     @State private var showingImagePicker = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
+    let locationFetcher = LocationFetcher()
+    
     var images: Images
     var formValidation: Bool{
         return imageCaption.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && selectedImage == nil
@@ -42,6 +45,7 @@ struct AddImageView: View {
                     }
                     .onTapGesture {
                         self.showingImagePicker = true
+                        self.locationFetcher.start()
                     }
                     
                     Section(header: Text("Caption")){
@@ -97,15 +101,11 @@ struct AddImageView: View {
         //Unwrapping selected image
         guard let image = self.selectedImage else {return}
         
-        let createdImage = ImageModel(image: image, name: imageCaption)
+        let createdImage = ImageModel(image: image, name: imageCaption , location: locationFetcher.lastLocation)
+        
         self.images.images.append(createdImage)
         self.images.images.sort()
         self.presentationMode.wrappedValue.dismiss()
     }
 }
 
-struct AddImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddImageView(images: Images())
-    }
-}
