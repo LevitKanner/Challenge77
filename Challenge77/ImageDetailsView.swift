@@ -10,9 +10,12 @@ import SwiftUI
 
 struct ImageDetailsView: View {
     @State var image: ImageModel
+    @State var viewDisplayed = 0
+    var segments = ["Photo", "Map"]
+    
     var body: some View {
         GeometryReader{ geometry in
-            
+            if self.viewDisplayed == 0{
             VStack{
                 Text(self.image.name.uppercased())
                     .font(.largeTitle)
@@ -28,6 +31,18 @@ struct ImageDetailsView: View {
                 
                 Spacer()
             }
+            }else {
+                MapView()
+                    .edgesIgnoringSafeArea(.all)
+            }
         }
+        
+        .navigationBarItems(trailing: Picker(selection: $viewDisplayed.animation(Animation.easeInOut), label: Text("view"), content: {
+            ForEach(0..<segments.count){
+                Text(self.segments[$0])
+            }
+        })
+            .pickerStyle(SegmentedPickerStyle()))
+            .navigationBarBackButtonHidden(self.viewDisplayed == 1)
     }
 }
